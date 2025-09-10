@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="16dp"
@@ -12,13 +13,13 @@
         android:id="@+id/tvState"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="状态：%s" />
+        android:text="@string/main_status" />
 
     <TextView
         android:id="@+id/tvSoundSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="声音大小：0dp" />
+        android:text="@string/sound_volume" />
 
     <View
         android:layout_width="match_parent"
@@ -30,7 +31,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="请选择音频格式：" />
+        android:text="@string/main_audio_format" />
 
     <RadioGroup
         android:id="@+id/rgAudioFormat"
@@ -42,23 +43,25 @@
             android:id="@+id/rbPcm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:text=".pcm" />
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/format_pcm" />
 
         <RadioButton
             android:id="@+id/rbMp3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:text=".mp3" />
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/format_mp3" />
 
         <RadioButton
             android:id="@+id/rbWav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="true"
-            android:paddingEnd="20dp"
-            android:text=".wav" />
+            android:text="@string/format_wav" />
 
     </RadioGroup>
 
@@ -72,7 +75,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="请选择音频采样率：" />
+        android:text="@string/main_simple_rate" />
 
     <RadioGroup
         android:id="@+id/rgSimpleRate"
@@ -84,23 +87,34 @@
             android:id="@+id/rb8K"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:text="8000Hz" />
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/simple_rate_8k" />
 
         <RadioButton
             android:id="@+id/rb16K"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="true"
-            android:paddingEnd="20dp"
-            android:text="16000Hz" />
+            android:text="@string/simple_rate_16k" />
 
         <RadioButton
             android:id="@+id/rb44K"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:text="44100Hz" />
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/simple_rate_44k" />
+
+        <RadioButton
+            android:id="@+id/rb48K"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/simple_rate_48k" />
+
     </RadioGroup>
 
     <View
@@ -113,7 +127,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="请选择音频位宽：" />
+        android:text="@string/main_bit_width" />
 
     <RadioGroup
         android:id="@+id/tbEncoding"
@@ -125,23 +139,24 @@
             android:id="@+id/rb8Bit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:text="8 Bit" />
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/bit_width_8" />
 
         <RadioButton
             android:id="@+id/rb16Bit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="true"
-            android:paddingEnd="20dp"
-            android:text="16Bit" />
+            android:text="@string/bit_width_16" />
     </RadioGroup>
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="音源：" />
+        android:text="@string/main_audio_source" />
 
     <RadioGroup
         android:id="@+id/tbSource"
@@ -153,16 +168,17 @@
             android:id="@+id/rbMic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="true"
-            android:paddingEnd="20dp"
-            android:text="麦克风" />
+            android:text="@string/audio_source_mic" />
 
         <RadioButton
             android:id="@+id/rbSystem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:text="内录(Android10+版本支持)" />
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/audio_source_internal" />
     </RadioGroup>
 
     <View
@@ -172,17 +188,35 @@
         android:layout_marginBottom="20dp"
         android:background="#666" />
 
-    <Button
-        android:id="@+id/btRecord"
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="录音" />
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
 
-    <Button
-        android:id="@+id/btStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="停止" />
+        <Button
+            android:id="@+id/btRecord"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_start" />
+
+        <Button
+            android:id="@+id/btStop"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_stop" />
+
+        <Button
+            android:id="@+id/btFiles"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_files" />
+
+    </LinearLayout>
 
     <com.zlw.audio_recorder.widget.AudioView
         android:id="@+id/audioView"
@@ -202,7 +236,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="可视化样式(上)：" />
+                android:text="@string/main_number_visualization" />
 
             <Spinner
                 android:id="@+id/spUpStyle"
@@ -219,7 +253,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="可视化样式(下)：" />
+                android:text="@string/main_waveform_visualization" />
 
             <Spinner
                 android:id="@+id/spDownStyle"
@@ -234,10 +268,11 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+
     <Button
         android:id="@+id/jumpTestActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="全屏显示--->>" />
+        android:text="@string/main_full_screen" />
 
 </LinearLayout>

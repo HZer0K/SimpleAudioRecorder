@@ -11,10 +11,10 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/basic_functions"
         android:scaleType="centerCrop" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#aa000000"
@@ -50,15 +50,15 @@
                 android:id="@+id/btRecord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="录音"
-                android:textSize="10sp" />
+                android:text="@string/main_start"
+                android:textSize="11sp" />
 
             <Button
                 android:id="@+id/btStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="停止"
-                android:textSize="10sp" />
+                android:text="@string/main_stop"
+                android:textSize="11sp" />
         </LinearLayout>
 
         <RelativeLayout
@@ -77,7 +77,7 @@
             android:id="@+id/tvState"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="状态：%s" />
+            android:text="@string/main_status" />
 
     </LinearLayout>
 </RelativeLayout>
