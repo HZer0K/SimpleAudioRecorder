@@ -146,6 +146,8 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
                     recordManager.changeRecordConfig(recordManager.getRecordConfig().setSampleRate(16000));
                 } else if (checkedId == R.id.rb44K) {
                     recordManager.changeRecordConfig(recordManager.getRecordConfig().setSampleRate(44100));
+                } else if (checkedId == R.id.rb48K) {
+                    recordManager.changeRecordConfig(recordManager.getRecordConfig().setSampleRate(48000));
                 }
             }
         });
@@ -160,6 +162,7 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
                 }
             }
         });
+
         tbSource.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -177,9 +180,10 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
     private void initRecord() {
         recordManager.init(MyApp.getInstance(), true);
         recordManager.changeFormat(RecordConfig.RecordFormat.WAV);
-        String recordDir = String.format(Locale.getDefault(), "%s/Record/com.zlw.main/",
+        String recordDir = String.format(Locale.getDefault(), "%s/SimpleAudioRecorder/",
                 Environment.getExternalStorageDirectory().getAbsolutePath());
         recordManager.changeRecordDir(recordDir);
+        Logger.i(TAG, "recordDir: %s", recordDir);
         initRecordEvent();
     }
 

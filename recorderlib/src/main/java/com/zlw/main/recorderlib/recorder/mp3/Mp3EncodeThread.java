@@ -79,7 +79,7 @@ public class Mp3EncodeThread extends Thread {
 
     private ChangeBuffer next() {
         for (; ; ) {
-            if (cacheBufferList == null || cacheBufferList.size() == 0) {
+            if (cacheBufferList == null || cacheBufferList.isEmpty()) {
                 try {
                     if (isOver) {
                         finish();
