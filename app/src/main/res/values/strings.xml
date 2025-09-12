@@ -26,4 +26,7 @@
     <string name="main_waveform_visualization">可视化样式(下)：</string>
     <string name="main_full_screen"><![CDATA[全屏显示--->>]]></string>
     <string name="audio_files">录音文件</string>
+    <string name="play">播放</string>
+    <string name="delete">删除</string>
+    <string name="file_activity_title">录音文件</string>
 </resources>

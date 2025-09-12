@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
@@ -89,6 +88,7 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         btRecord.setOnClickListener(this);
         btStop.setOnClickListener(this);
         findViewById(R.id.jumpTestActivity).setOnClickListener(this);
+        findViewById(R.id.jumpFileActivity).setOnClickListener(this);
     }
 
     @Override
@@ -248,6 +248,8 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
             doStop();
         } else if (id == R.id.jumpTestActivity) {
             startActivity(new Intent(this, TestHzActivity.class));
+        } else if (id == R.id.jumpFileActivity) {
+            startActivity(new Intent(this, FileActivity.class));
         }
     }
 
