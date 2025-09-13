@@ -225,6 +225,7 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         recordManager.setRecordSoundSizeListener(new RecordSoundSizeListener() {
             @Override
             public void onSoundSize(int soundSize) {
+                Log.d("MainActivity", "onSoundSize " + soundSize);
                 tvSoundSize.setText(String.format(Locale.getDefault(), "%s db", soundSize));
             }
         });
@@ -268,6 +269,10 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
     }
 
     private void doPlay() {
+        if (recordManager.isMicrophoneOccupied(getApplicationContext())) {
+            Toast.makeText(this, "录音设备被占用", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (isStart) {
             recordManager.pause();
             btRecord.setText("开始");

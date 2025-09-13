@@ -82,6 +82,9 @@ public class RecordService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    public static boolean isMicrophoneOccupied(Context context) {
+        return RecordHelper.getInstance().isMicrophoneOccupied(context);
+    }
 
     public static void startRecording(Context context) {
         Intent intent = new Intent(context, RecordService.class);

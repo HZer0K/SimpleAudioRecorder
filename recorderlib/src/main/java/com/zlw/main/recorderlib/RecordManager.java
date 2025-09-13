@@ -3,6 +3,7 @@ package com.zlw.main.recorderlib;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
 import android.media.projection.MediaProjection;
 import android.os.Build;
 
@@ -143,6 +144,10 @@ public class RecordManager {
 
     public RecordConfig getRecordConfig() {
         return RecordService.getRecordConfig();
+    }
+
+    public boolean isMicrophoneOccupied(Context context) {
+        return RecordService.isMicrophoneOccupied(context);
     }
 
     /**

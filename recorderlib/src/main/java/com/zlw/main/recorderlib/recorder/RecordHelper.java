@@ -1,14 +1,19 @@
 package com.zlw.main.recorderlib.recorder;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioPlaybackCaptureConfiguration;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.zlw.main.recorderlib.RecordManager;
 import com.zlw.main.recorderlib.recorder.listener.RecordDataListener;
@@ -95,6 +100,60 @@ public class RecordHelper {
     public void setRecordFftDataListener(RecordFftDataListener recordFftDataListener) {
         this.recordFftDataListener = recordFftDataListener;
     }
+
+    /**
+     * 检测麦克风是否被占用
+     * @return true表示被占用，false表示未被占用
+     */
+    public boolean isMicrophoneOccupied(Context context) {
+        // 如果是系统音频源，则不需要检测麦克风占用
+        if (currentConfig != null && currentConfig.getSource() == RecordConfig.SOURCE_SYSTEM) {
+            return false;
+        }
+
+        try {
+            // 检查是否有通话在进行中
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager.getMode() == AudioManager.MODE_IN_CALL ||
+                    audioManager.getMode() == AudioManager.MODE_IN_COMMUNICATION) {
+                return true;
+            }
+
+            // 检查是否正在通话中（包括VoIP）
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (telephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
+                return true;
+            }
+
+            // 尝试更轻量级的方法检查AudioRecord是否可用
+            int sampleRate = currentConfig != null ? currentConfig.getSampleRate() : 44100;
+            int channelConfig = currentConfig != null ? currentConfig.getChannelConfig() : AudioFormat.CHANNEL_IN_MONO;
+            int audioFormat = currentConfig != null ? currentConfig.getEncodingConfig() : AudioFormat.ENCODING_PCM_16BIT;
+
+            int bufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);
+            if (bufferSize <= 0) {
+                return true;
+            }
+
+            AudioRecord audioRecord = new AudioRecord(
+                    MediaRecorder.AudioSource.MIC,
+                    sampleRate,
+                    channelConfig,
+                    audioFormat,
+                    bufferSize
+            );
+
+            boolean initialized = audioRecord.getState() == AudioRecord.STATE_INITIALIZED;
+            audioRecord.release();
+
+            return !initialized;
+        } catch (Exception e) {
+            Logger.e(TAG, "Error checking microphone: " + e.getMessage());
+            return true;
+        }
+    }
+
+
 
     public void start(String filePath, RecordConfig config) {
         this.currentConfig = config;
