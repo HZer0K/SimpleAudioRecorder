@@ -7,6 +7,7 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,21 +44,31 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
     Button btStop;
     TextView tvState;
     TextView tvSoundSize;
+    TextView tvRecordDuration;
     RadioGroup rgAudioFormat;
     RadioGroup rgSimpleRate;
     RadioGroup tbEncoding;
     RadioGroup tbSource;
     AudioView audioView;
-    Spinner spUpStyle;
-    Spinner spDownStyle;
-
     private boolean isStart = false;
     private boolean isPause = false;
+    private long startTime = 0;
     private final RecordManager recordManager = RecordManager.getInstance();
-
     private MediaProjectionManager mediaProjectionManager;
     private static final String[] STYLE_DATA = new String[]{"STYLE_ALL", "STYLE_NOTHING", "STYLE_WAVE", "STYLE_HOLLOW_LUMP"};
-
+    private Handler timeHandler = new Handler();
+    private final Runnable timeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (isStart && !isPause) {
+                long elapsedTime = System.currentTimeMillis() - startTime;
+                int seconds = (int) (elapsedTime / 1000) % 60;
+                int minutes = (int) (elapsedTime / (1000 * 60));
+                tvRecordDuration.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                timeHandler.postDelayed(timeRunnable, 1000);
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,16 +90,14 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         tvState = findViewById(R.id.tvState);
         btRecord = findViewById(R.id.btRecord);
         tvSoundSize = findViewById(R.id.tvSoundSize);
+        tvRecordDuration = findViewById(R.id.tvRecordDuration);
         rgAudioFormat = findViewById(R.id.rgAudioFormat);
         rgSimpleRate = findViewById(R.id.rgSimpleRate);
         tbEncoding = findViewById(R.id.tbEncoding);
         audioView = findViewById(R.id.audioView);
-        spUpStyle = findViewById(R.id.spUpStyle);
-        spDownStyle = findViewById(R.id.spDownStyle);
         tbSource = findViewById(R.id.tbSource);
         btRecord.setOnClickListener(this);
         btStop.setOnClickListener(this);
-        findViewById(R.id.jumpTestActivity).setOnClickListener(this);
         findViewById(R.id.jumpFileActivity).setOnClickListener(this);
     }
 
@@ -118,10 +127,6 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         tvState.setVisibility(View.GONE);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, STYLE_DATA);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spUpStyle.setAdapter(adapter);
-        spDownStyle.setAdapter(adapter);
-        spUpStyle.setOnItemSelectedListener(this);
-        spDownStyle.setOnItemSelectedListener(this);
     }
 
     private void initEvent() {
@@ -224,7 +229,7 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         recordManager.setRecordSoundSizeListener(new RecordSoundSizeListener() {
             @Override
             public void onSoundSize(int soundSize) {
-                tvSoundSize.setText(String.format(Locale.getDefault(), "声音大小：%s db", soundSize));
+                tvSoundSize.setText(String.format(Locale.getDefault(), "%s db", soundSize));
             }
         });
         recordManager.setRecordResultListener(new RecordResultListener() {
@@ -247,8 +252,6 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
             doPlay();
         } else if (id == R.id.btStop) {
             doStop();
-        } else if (id == R.id.jumpTestActivity) {
-            startActivity(new Intent(this, TestHzActivity.class));
         } else if (id == R.id.jumpFileActivity) {
             // 传递录音文件路径
             Intent intent = new Intent(this, FileActivity.class);
@@ -265,6 +268,7 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         btRecord.setText("开始");
         isPause = false;
         isStart = false;
+        timeHandler.removeCallbacks(timeRunnable);
     }
 
     private void doPlay() {
@@ -273,30 +277,44 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
             btRecord.setText("开始");
             isPause = true;
             isStart = false;
+            timeHandler.removeCallbacks(timeRunnable);
         } else {
             if (isPause) {
                 recordManager.resume();
             } else {
                 recordManager.start();
+                startTime = System.currentTimeMillis();
             }
             btRecord.setText("暂停");
             isStart = true;
+            isPause = false;
+            timeHandler.postDelayed(timeRunnable, 1000);
         }
     }
 
-
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        int parentId = parent.getId();
-        if (parentId == R.id.spUpStyle) {
-            audioView.setStyle(AudioView.ShowStyle.getStyle(STYLE_DATA[position]), audioView.getDownStyle());
-        } else if (parentId == R.id.spDownStyle) {
-            audioView.setStyle(audioView.getUpStyle(), AudioView.ShowStyle.getStyle(STYLE_DATA[position]));
-        }
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //nothing
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Handler getTimeHandler() {
+        return timeHandler;
+    }
+
+    public void setTimeHandler(Handler timeHandler) {
+        this.timeHandler = timeHandler;
     }
 }

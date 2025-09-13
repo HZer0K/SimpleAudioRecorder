@@ -3,30 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/tvState"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/main_status" />
-
-    <TextView
-        android:id="@+id/tvSoundSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sound_volume" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:background="#666" />
 
     <TextView
         android:layout_width="match_parent"
@@ -136,7 +116,7 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/rb8Bit"
+            android:id="@+id/rb8Bit" style="@style/RadioButton.LargeTouchTarget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -144,7 +124,7 @@
             android:text="@string/bit_width_8" />
 
         <RadioButton
-            android:id="@+id/rb16Bit"
+            android:id="@+id/rb16Bit" style="@style/RadioButton.LargeTouchTarget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -152,6 +132,12 @@
             android:text="@string/bit_width_16" />
     </RadioGroup>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="#666" />
 
     <TextView
         android:layout_width="match_parent"
@@ -218,61 +204,37 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_status" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvSoundSize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/sound_volume" />
+
+        <TextView
+            android:id="@+id/tvRecordDuration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@string/record_duration" />
+    </LinearLayout>
+
     <com.zlw.audio_recorder.widget.AudioView
         android:id="@+id/audioView"
         android:layout_width="match_parent"
         android:layout_height="150dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_number_visualization" />
-
-            <Spinner
-                android:id="@+id/spUpStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_waveform_visualization" />
-
-            <Spinner
-                android:id="@+id/spDownStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-
-    <Button
-        android:id="@+id/jumpTestActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/main_full_screen" />
 
 </LinearLayout>

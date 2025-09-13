@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="SimpleAudioRecorder">SimpleAudioRecorder</string>
 
@@ -6,7 +7,7 @@
     <string name="main_stop">停止</string>
     <string name="main_files">文件</string>
     <string name="basic_functions">Basic functions</string>
-    <string name="sound_volume">声音大小：0dp</string>
+    <string name="sound_volume">0dp</string>
     <string name="main_audio_format">请选择音频格式：</string>
     <string name="format_pcm">.pcm</string>
     <string name="format_mp3">.mp3</string>
@@ -24,9 +25,9 @@
     <string name="audio_source_internal">内录</string>
     <string name="main_number_visualization">可视化样式(上)：</string>
     <string name="main_waveform_visualization">可视化样式(下)：</string>
-    <string name="main_full_screen"><![CDATA[全屏显示--->>]]></string>
     <string name="audio_files">录音文件</string>
     <string name="play">播放</string>
     <string name="delete">删除</string>
     <string name="file_activity_title">录音文件</string>
+    <string name="record_duration">00:00</string>
 </resources>
