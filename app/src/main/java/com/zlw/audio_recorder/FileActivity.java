@@ -2,6 +2,7 @@ package com.zlw.audio_recorder;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileActivity extends ComponentActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class FileActivity extends ComponentActivity {
     private ArrayAdapter<String> adapter;
     private List<String> fileList;
 
@@ -39,44 +40,52 @@ public class FileActivity extends ComponentActivity implements AdapterView.OnIte
     }
 
     private void loadRecordingFiles() {
-        // 加载录音文件并更新列表
-        File directory = new File(getExternalFilesDir(null), "recordings");
-        if (directory.exists()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    fileList.add(file.getName());
+        // 接收录音目录路径
+        String recordDirPath = getIntent().getStringExtra("recordFilePath");
+        Log.d("FileActivity", "Received recordDirPath: " + recordDirPath);
+
+        if (recordDirPath != null) {
+            File recordDir = new File(recordDirPath);
+
+            // 检查目录是否存在
+            if (recordDir.exists() && recordDir.isDirectory()) {
+                // 列出目录中的所有文件
+                File[] files = recordDir.listFiles();
+
+                if (files != null) {
+                    fileList.clear(); // 清空之前的数据
+                    // 处理文件列表
+                    for (File file : files) {
+                        if (file.isFile()) {
+                            fileList.add(file.getName());
+                            Log.d("FileActivity", "Found file: " + file.getName());
+                        }
+                    }
+                    adapter.notifyDataSetChanged(); // 更新列表
                 }
-                adapter.notifyDataSetChanged();
+            }
+        } else {
+            Log.e("FileActivity", "recordDirPath is null.");
+        }
+    }
+
+
+    private void playRecording(String fileName) {
+        // 从 Intent 中获取录音目录路径
+        String recordDirPath = getIntent().getStringExtra("recordDirPath");
+
+        if (recordDirPath != null) {
+            // 构建完整文件路径
+            File file = new File(recordDirPath, fileName);
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(file.getAbsolutePath());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    private void playRecording(String fileName) {
-        // 播放录音文件
-        File file = new File(getExternalFilesDir(null), "recordings/" + fileName);
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setDataSource(file.getAbsolutePath());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        // 处理其他点击事件
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        // 处理选择事件
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        // 处理未选择事件
-    }
 }

@@ -7,6 +7,7 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -249,7 +250,13 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         } else if (id == R.id.jumpTestActivity) {
             startActivity(new Intent(this, TestHzActivity.class));
         } else if (id == R.id.jumpFileActivity) {
-            startActivity(new Intent(this, FileActivity.class));
+            // 传递录音文件路径
+            Intent intent = new Intent(this, FileActivity.class);
+            String recordDir = String.format(Locale.getDefault(), "%s/SimpleAudioRecorder/",
+                    Environment.getExternalStorageDirectory().getAbsolutePath());
+            intent.putExtra("recordFilePath", recordDir);
+            Log.d("recordFilePath", recordDir);
+            startActivity(intent);
         }
     }
 
