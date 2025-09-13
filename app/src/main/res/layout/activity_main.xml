@@ -116,7 +116,8 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/rb8Bit" style="@style/RadioButton.LargeTouchTarget"
+            android:id="@+id/rb8Bit"
+            style="@style/RadioButton.LargeTouchTarget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -124,7 +125,8 @@
             android:text="@string/bit_width_8" />
 
         <RadioButton
-            android:id="@+id/rb16Bit" style="@style/RadioButton.LargeTouchTarget"
+            android:id="@+id/rb16Bit"
+            style="@style/RadioButton.LargeTouchTarget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -208,11 +210,14 @@
         android:id="@+id/tvState"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/main_status" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal">
 
         <TextView

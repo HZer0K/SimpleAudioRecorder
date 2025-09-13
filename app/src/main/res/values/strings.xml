@@ -2,7 +2,7 @@
 <resources>
     <string name="SimpleAudioRecorder">SimpleAudioRecorder</string>
 
-    <string name="main_status">状态：%s</string>
+    <string name="main_status">空闲中</string>
     <string name="main_start">录音</string>
     <string name="main_stop">停止</string>
     <string name="main_files">文件</string>

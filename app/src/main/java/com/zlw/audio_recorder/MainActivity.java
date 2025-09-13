@@ -14,12 +14,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -55,7 +55,6 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
     private long startTime = 0;
     private final RecordManager recordManager = RecordManager.getInstance();
     private MediaProjectionManager mediaProjectionManager;
-    private static final String[] STYLE_DATA = new String[]{"STYLE_ALL", "STYLE_NOTHING", "STYLE_WAVE", "STYLE_HOLLOW_LUMP"};
     private Handler timeHandler = new Handler();
     private final Runnable timeRunnable = new Runnable() {
         @Override
@@ -69,6 +68,14 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
             }
         }
     };
+    private final ActivityResultLauncher<Intent> screenCaptureLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    MediaProjection mediaProjection = mediaProjectionManager.getMediaProjection(result.getResultCode(), result.getData());
+                    recordManager.setMediaProjection(mediaProjection);
+                }
+            });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,20 +119,9 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
         super.onStop();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == 2000) {
-            if (data != null) {
-                MediaProjection mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
-                recordManager.setMediaProjection(mediaProjection);
-            }
-        }
-    }
-
     private void initAudioView() {
-        tvState.setVisibility(View.GONE);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, STYLE_DATA);
+        tvState.setVisibility(View.VISIBLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
@@ -177,7 +173,7 @@ public class MainActivity extends ComponentActivity implements AdapterView.OnIte
                 } else if (checkedId == R.id.rbSystem) {
                     recordManager.setSource(RecordConfig.SOURCE_SYSTEM);
                     mediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-                    startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), 2000);
+                    screenCaptureLauncher.launch(mediaProjectionManager.createScreenCaptureIntent());
                 }
             }
         });
